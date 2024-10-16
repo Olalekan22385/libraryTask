@@ -34,3 +34,10 @@ function getAnyBook(){
 }
 getAnyBook();
 // console.log(getAnyBook);
+
+// Function to get a book index========================> 
+function getBookByIndex(){
+    const bookIndex = library.findIndex(library => library === 'Rich dad Poor dad')
+    return bookIndex
+}
+console.log(getBookByIndex());
