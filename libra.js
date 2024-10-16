@@ -27,8 +27,8 @@ console.log(library);
 
 // Function to get a book========================> 
 function getAnyBook(){
-    const getAnyBook = library.findIndex(library, 5);
-    console.log(getAnyBook);
+    const getAnyBook = library.find(library => library === ' Atomic Habits');
+    console.log(`You collected: ${getAnyBook}`);
     
 
 }
