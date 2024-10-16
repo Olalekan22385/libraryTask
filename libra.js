@@ -1,36 +1,102 @@
-// An aaray of books repping a library
-const library = ['Rich dad Poor dad', ' Gifted Hands',
-' Atomic Habits', ' Business Intelligence for Dummies', 
-' Don\'t give a fuck', ' Psychology of money',
- ' How to talk to any one', ' Mindset', 
- ' How to be a Stoic', ' Think and Grow Rich' 
-]
+//Creating Server
+const express = require('express');
+const app = express();
 
-console.log("The books available in the library: " + library);
+//Middleware
+app.use(express.json());
+
+// An aaray of books repping a library
+const library = [
+  {
+    id: 1,
+    title: 'Rich dad Poor dad',
+    author: 'James',
+  },
+  {
+    id: 2,
+    title: 'Gifted Hands',
+    author: 'Steve',
+  },
+  {
+    id: 3,
+    title: 'Atomic Habits',
+    author: 'Bond',
+  },
+  {
+    id: 4,
+    title: 'Business Intelligence for Dummies',
+    author: 'Michael',
+  },
+  {
+    id: 5,
+    title: "Don't give a fuck",
+    author: 'John cena',
+  },
+];
 
 // Function to add new book==========================>
-function addBook(){
-    const new_1 = '48 laws of Power', new_2 = 'Things fall Appart'
-  const addBook = console.log("We added to new books: " + library.push('48 laws of Power', 'Things fall Appart' ));   
+function addBook(newBook) {
+  if (newBook === '') {
+    res.send('Pls add new book');
+    return;
+  }
+  library.push(newBook);
+  return newBook;
 }
-console.log();
 
-addBook();
-console.log(library);
-
-// Function to add new book========================> 
-function delBook(){
-    const delBook = console.log(library.pop());   
+// Function to delete book========================>
+function delBook(id) {
+  const index = library.findIndex((u) => u.id === parseInt(id));
+  if (index === -1) {
+    return 'Not found';
+  }
+  const delBook = library.splice(index, 1);
+  return delBook;
 }
-delBook();
-console.log(library);
 
-// Function to get a book========================> 
-function getAnyBook(){
-    const getAnyBook = library.find(library => library === ' Atomic Habits');
-    console.log(`You collected: ${getAnyBook}`);
-    
-
+// Function to update book=======================>
+function updateBook(id, req) {
+  const index = library.find((u) => u.id === parseInt(id));
+  //   const updatedBook = {
+  //     index,
+  //     ...{ title: req.body.title, author: req.body.author },
+  //   };
+  index.author = req.body.author;
+  index.title = req.body.title;
+  return index;
 }
-getAnyBook();
-// console.log(getAnyBook);
+
+//Default API to get the available books
+app.get('/books', (req, res) => {
+  if (library.length === 0) {
+    res.send('Sorry!, no book at the moment. Check back later');
+    return;
+  }
+  res.send(library);
+});
+
+//Optimizing API to add books
+app.post('/book', (req, res) => {
+  const newBook = req.body;
+  const book = addBook(newBook);
+  res.status(200).send(book);
+});
+
+//Optimizing API to delete books
+app.delete('/book/:id', (req, res) => {
+  const id = req.params.id;
+  const delBookAtIndex = delBook(id);
+  res.status(200).send(delBookAtIndex);
+});
+
+//Optimizing API to update books
+app.put('/book/:id', (req, res) => {
+  const id = req.params.id;
+  const updateBookAtIndex = updateBook(id, req);
+  res.status(200).send(updateBookAtIndex);
+});
+const port = 2300;
+
+app.listen(port, () => {
+  console.log(`Your are running on port ${port}`);
+});
