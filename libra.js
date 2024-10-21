@@ -55,14 +55,10 @@ function delBook(id) {
 }
 
 // Function to update book=======================>
-function updateBook(id, req) {
-  const index = library.find((u) => u.id === parseInt(id));
-  //   const updatedBook = {
-  //     index,
-  //     ...{ title: req.body.title, author: req.body.author },
-  //   };
-  index.author = req.body.author;
-  index.title = req.body.title;
+function updateBook(id, newAuthor, newTitle) {
+  index = library.find((u) => u.id === parseInt(id));
+  index.author = newAuthor;
+  index.title = newTitle;
   return index;
 }
 
@@ -92,8 +88,10 @@ app.delete('/book/:id', (req, res) => {
 //Optimizing API to update books
 app.put('/book/:id', (req, res) => {
   const id = req.params.id;
-  const updateBookAtIndex = updateBook(id, req);
-  res.status(200).send(updateBookAtIndex);
+  newAuthor = req.body.author;
+  newTitle = req.body.title;
+  const updatedBook = updateBook(id, newAuthor, newTitle);
+  res.status(200).send(updatedBook);
 });
 const port = 2300;
 
